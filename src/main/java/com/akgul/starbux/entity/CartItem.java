@@ -3,23 +3,24 @@ package com.akgul.starbux.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "CART_ITEM")
 public class CartItem extends StarbuxObject {
+
+    @Column(name = "QUANTITY")
     private int quantity;
+
+    @Column(name = "PRICE")
     private BigDecimal price;
 
-    @ManyToOne
-    @JoinColumn(name = "PRODUCT_ID")
-    private Product product;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Product> products;
 
     @ManyToOne
     @JoinColumn(name = "CART_ID")
