@@ -1,0 +1,53 @@
+package com.akgul.starbux.api.configuration;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class WebSecurity extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .cors().and()
+                .csrf().disable().authorizeRequests()
+                .antMatchers("/report*").hasRole("ADMIN")
+                .antMatchers("/cart*").hasAnyRole("CUSTOMER", "ADMIN")
+                .antMatchers("/order*").hasAnyRole("CUSTOMER", "ADMIN")
+                .antMatchers("/product*").hasAnyRole("CUSTOMER", "ADMIN")
+                .and()
+                .httpBasic().and()
+                .headers().frameOptions().disable()
+                .and().authorizeRequests()
+                .antMatchers("/swagger-resources/*", "*.html", "/api/v1/swagger.json")
+                .permitAll()
+        ;
+    }
+
+    @Bean
+    @Override
+    public UserDetailsService userDetailsService() {
+        UserDetails customer = User.withUsername("customer")
+                .passwordEncoder(PasswordEncoderFactories.createDelegatingPasswordEncoder()::encode)
+                .password("customer").roles("CUSTOMER").build();
+
+        UserDetails admin = User.withUsername("admin")
+                .passwordEncoder(PasswordEncoderFactories.createDelegatingPasswordEncoder()::encode)
+                .password("admin").roles("ADMIN").build();
+
+        InMemoryUserDetailsManager userDetailsManager = new InMemoryUserDetailsManager();
+
+        userDetailsManager.createUser(customer);
+        userDetailsManager.createUser(admin);
+
+        return userDetailsManager;
+    }
+}

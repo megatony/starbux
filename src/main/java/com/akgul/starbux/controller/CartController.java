@@ -12,11 +12,9 @@ public class CartController {
     @Autowired
     private CartRepository repository;
 
-    public Cart getCartById(Long cartId) {
-        return repository.getByIdAndDeleted(cartId, false);
-    }
-
     public Cart getCartByUser(User user) {
         return repository.getByUserAndDeleted(user, false);
     }
+
+    public Cart saveCart(Cart cart) { return repository.save(cart);}
 }

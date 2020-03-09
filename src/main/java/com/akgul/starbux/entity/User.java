@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Table(name = "USERS")
 public class User extends StarbuxObject {
 
-    @Column(name = "USER_NAME")
+    @Column(name = "USER_NAME", unique = true)
     private String userName;
 
     @Enumerated(EnumType.STRING)

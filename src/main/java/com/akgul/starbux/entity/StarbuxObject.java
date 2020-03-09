@@ -3,6 +3,7 @@ package com.akgul.starbux.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Calendar;
@@ -18,7 +19,7 @@ public class StarbuxObject {
     private Long id;
 
     @JsonIgnore
-    @Column(name = "DELETED")
+    @Column(name = "DELETED", nullable = false)
     private boolean deleted;
 
     @JsonIgnore

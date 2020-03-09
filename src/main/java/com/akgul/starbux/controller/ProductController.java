@@ -22,8 +22,8 @@ public class ProductController {
         return repository.findAllByDeleted(false);
     }
 
-    public List<Product> getProductsByProductType(ProductType productType) {
-        return repository.findAllByDeletedAndProductTypeEquals(false, productType);
+    public Product saveProduct(Product product) {
+        return repository.save(product);
     }
 
 

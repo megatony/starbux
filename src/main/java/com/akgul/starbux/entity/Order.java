@@ -2,6 +2,7 @@ package com.akgul.starbux.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -26,10 +27,7 @@ public class Order extends StarbuxObject {
     @Column(name = "DISCOUNT_AMOUNT")
     private BigDecimal discountAmount;
 
-    @Column(name = "PAID_AMOUNT")
-    private BigDecimal paidAmount;
-
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "DISCOUNT_ID")
     private Discount discount;
 }

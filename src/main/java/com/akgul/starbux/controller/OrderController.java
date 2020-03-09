@@ -14,15 +14,17 @@ public class OrderController {
     @Autowired
     private OrderRepository repository;
 
-    public Order getOrderById(Long orderId) {
-        return repository.getByIdAndDeleted(orderId, false);
+    public List<Order> getOrdersByUser(User user) {
+        return repository.findAllByUserEqualsAndDeleted(user, false);
     }
 
-    public Order getOrdersByUser(User user) {
-        return repository.getByUserAndDeleted(user, false);
+    public Order getUserOrderById(User user, Long orderId) {
+        return repository.getByUserEqualsAndIdAndDeleted(user, orderId, false);
     }
 
-    public List<Order> getOrders() {
-        return repository.findAllByDeleted(false);
+    public Order saveOrder(Order order) {
+        return repository.save(order);
     }
+
+
 }
