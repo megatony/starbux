@@ -8,7 +8,7 @@ RUN mvn clean install spring-boot:repackage -DskipTests
 
 FROM openjdk:8-jre-alpine
 
-COPY --from=builder /Users/starbux/target/starbux-0.0.1.jar /starbux.jar
+COPY --from=builder /Users/starbux/target/starbux-0.0.1-SNAPSHOT.jar /starbux.jar
 
 CMD ["java","-Dserver.port=8080", "-jar","/starbux.jar"]
 EXPOSE 8080

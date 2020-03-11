@@ -12,8 +12,6 @@ import java.util.Map;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    Order getByIdAndDeleted(Long id, boolean deleted);
     Order getByUserEqualsAndIdAndDeleted(User user, Long id, boolean deleted);
-    List<Order> findAllByDeleted(boolean deleted);
     List<Order> findAllByUserEqualsAndDeleted(User user, boolean deleted);
 }

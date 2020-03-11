@@ -49,38 +49,28 @@ public class DiscountServiceTest {
         cartItem.setQuantity(1);
         cartItem.setPrice(BigDecimal.valueOf(5));
 
-        List<Product> products = new ArrayList<>();
         Product product = new Product();
         product.setPrice(BigDecimal.valueOf(5));
         product.setProductType(ProductType.DRINK);
         product.setProductName("test");
-        products.add(product);
 
         CartItem cartItem2 = new CartItem();
         cartItem2.setQuantity(1);
         cartItem2.setPrice(BigDecimal.valueOf(4));
 
-        List<Product> productsForCartItem2 = new ArrayList<>();
         Product product2 = new Product();
         product2.setPrice(BigDecimal.valueOf(4));
         product2.setProductType(ProductType.DRINK);
         product2.setProductName("test 2");
-        productsForCartItem2.add(product2);
-
-        cartItem2.setProducts(productsForCartItem2);
 
         CartItem cartItem3 = new CartItem();
         cartItem3.setQuantity(1);
         cartItem3.setPrice(BigDecimal.valueOf(3));
 
-        List<Product> productsForCartItem3 = new ArrayList<>();
         Product product3 = new Product();
         product3.setPrice(BigDecimal.valueOf(3));
         product3.setProductType(ProductType.DRINK);
         product3.setProductName("test 3");
-        productsForCartItem2.add(product3);
-
-        cartItem2.setProducts(productsForCartItem3);
 
         cartItem.setDrinkProduct(product);
         cartItem2.setDrinkProduct(product2);
@@ -135,27 +125,19 @@ public class DiscountServiceTest {
         cartItem2.setQuantity(1);
         cartItem2.setPrice(BigDecimal.valueOf(4));
 
-        List<Product> productsForCartItem2 = new ArrayList<>();
         Product product2 = new Product();
         product2.setPrice(BigDecimal.valueOf(4));
         product2.setProductType(ProductType.DRINK);
         product2.setProductName("test 2");
-        productsForCartItem2.add(product2);
-
-        cartItem2.setProducts(productsForCartItem2);
 
         CartItem cartItem3 = new CartItem();
         cartItem3.setQuantity(1);
         cartItem3.setPrice(BigDecimal.valueOf(3));
 
-        List<Product> productsForCartItem3 = new ArrayList<>();
         Product product3 = new Product();
         product3.setPrice(BigDecimal.valueOf(3));
         product3.setProductType(ProductType.DRINK);
         product3.setProductName("test 3");
-        productsForCartItem2.add(product3);
-
-        cartItem2.setProducts(productsForCartItem3);
 
         cartItem.setDrinkProduct(product);
         cartItem2.setDrinkProduct(product2);

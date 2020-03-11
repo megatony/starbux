@@ -35,12 +35,10 @@ public class CartServiceTest {
         User user = new User();
         user.setUserName("test");
 
-        List<Product> products = new ArrayList<>();
         Product product = new Product();
         product.setProductName("Test product");
         product.setProductType(ProductType.DRINK);
         product.setPrice(BigDecimal.TEN);
-        products.add(product);
 
         int purchaseCount = 1;
 
@@ -50,7 +48,7 @@ public class CartServiceTest {
         CartItem cartItem = new CartItem();
         cartItem.setId(1L);
         cartItem.setQuantity(purchaseCount);
-        cartItem.setProducts(products);
+        cartItem.setDrinkProduct(product);
         cartItem.setCart(cart);
         cartItem.setPrice(BigDecimal.TEN);
         cartItems.add(cartItem);
@@ -83,12 +81,10 @@ public class CartServiceTest {
         User user = new User();
         user.setUserName("test");
 
-        List<Product> products = new ArrayList<>();
         Product product = new Product();
         product.setProductName("Test product");
         product.setProductType(ProductType.DRINK);
         product.setPrice(BigDecimal.TEN);
-        products.add(product);
 
         int purchaseCount = 1;
 
@@ -98,7 +94,7 @@ public class CartServiceTest {
         CartItem cartItem = new CartItem();
         cartItem.setId(1L);
         cartItem.setQuantity(purchaseCount);
-        cartItem.setProducts(products);
+        cartItem.setDrinkProduct(product);
         cartItem.setCart(cart);
         cartItem.setPrice(BigDecimal.TEN);
         cartItems.add(cartItem);
@@ -107,7 +103,7 @@ public class CartServiceTest {
         cart.setTotalAmount(BigDecimal.TEN);
         cart.setCartItems(cartItems);
 
-        Assert.assertEquals(cartService.getCartItemOfProductFromCart(cart, product), cartItem);
+        Assert.assertEquals(cartService.getCartItemOfDrinkProductFromCart(cart, product), cartItem);
     }
 
     @Test
@@ -115,12 +111,10 @@ public class CartServiceTest {
         User user = new User();
         user.setUserName("test");
 
-        List<Product> products = new ArrayList<>();
         Product product = new Product();
         product.setProductName("Test product");
         product.setProductType(ProductType.DRINK);
         product.setPrice(BigDecimal.TEN);
-        products.add(product);
 
         int purchaseCount = 1;
 
@@ -132,7 +126,7 @@ public class CartServiceTest {
         CartItem cartItem = new CartItem();
         cartItem.setId(1L);
         cartItem.setQuantity(purchaseCount);
-        cartItem.setProducts(products);
+        cartItem.setDrinkProduct(product);
         cartItem.setCart(cart);
         cartItem.setPrice(BigDecimal.TEN);
         cartItems.add(cartItem);
@@ -150,7 +144,7 @@ public class CartServiceTest {
         productList.add(product);
         productList.add(sideProduct);
 
-        cartItemWithSideProduct.setProducts(productList);
+        cartItemWithSideProduct.setSideProducts(productList);
         cartItemWithSideProduct.setCart(cart);
         cartItemWithSideProduct.setPrice(BigDecimal.valueOf(11));
 
@@ -159,7 +153,7 @@ public class CartServiceTest {
         cartItems.add(cartItemWithSideProduct);
         cart.setCartItems(cartItems);
 
-        Assert.assertEquals(cartService.getCartItemOfProductFromCart(cart, product), cartItem);
+        Assert.assertEquals(cartService.getCartItemOfDrinkProductFromCart(cart, product), cartItem);
     }
 
     @Test

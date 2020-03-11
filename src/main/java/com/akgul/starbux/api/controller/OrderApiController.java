@@ -6,6 +6,8 @@ import com.akgul.starbux.entity.Discount;
 import com.akgul.starbux.entity.Order;
 import com.akgul.starbux.entity.User;
 import com.akgul.starbux.service.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -19,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/order")
 public class OrderApiController {
+    private Logger LOGGER = LoggerFactory.getLogger(OrderApiController.class);
 
     @Autowired
     private OrderService orderService;
@@ -77,6 +80,7 @@ public class OrderApiController {
         Order order = orderService.createOrder(cart, user);
 
         if (ObjectUtils.isEmpty(order)) {
+            LOGGER.error("Order cannot be created for user " + authentication.getName());
             return new StarbuxConflictApiResponse("Creating order process failed.");
         }
 
@@ -86,6 +90,7 @@ public class OrderApiController {
             discountService.saveDiscount(discount);
         }
 
+        LOGGER.debug("Cart will be deleted for user " + authentication.getName() + " after successful order creating.");
         cart.setDeleted(true);
         cartItemService.deleteCartItems(cart.getCartItems());
         cartService.deleteCart(cart);

@@ -29,17 +29,14 @@ public class CartTest {
 
         CartItem cartItem = new CartItem();
         cartItem.setQuantity(3);
-        cartItem.setProducts(new ArrayList<>());
         cartItem.setDrinkProduct(product);
 
         CartItem cartItem2 = new CartItem();
         cartItem2.setQuantity(6);
-        cartItem2.setProducts(new ArrayList<>());
         cartItem2.setDrinkProduct(product);
 
         CartItem cartItem3 = new CartItem();
         cartItem3.setQuantity(9);
-        cartItem3.setProducts(new ArrayList<>());
         cartItem3.setDrinkProduct(product);
 
         List<CartItem> cartItems = new ArrayList<>();
@@ -70,18 +67,15 @@ public class CartTest {
 
         CartItem cartItem = new CartItem();
         cartItem.setQuantity(3);
-        cartItem.setProducts(new ArrayList<>());
         cartItem.setDrinkProduct(product);
 
         CartItem cartItem2 = new CartItem();
         cartItem2.setQuantity(6);
-        cartItem2.setProducts(new ArrayList<>());
-        cartItem2.setDrinkProduct(product);
+        cartItem2.setDrinkProduct(product1);
 
         CartItem cartItem3 = new CartItem();
         cartItem3.setQuantity(9);
-        cartItem3.setProducts(new ArrayList<>());
-        cartItem3.setDrinkProduct(product);
+        cartItem3.setDrinkProduct(product2);
 
         List<CartItem> cartItems = new ArrayList<>();
         cartItems.add(cartItem);

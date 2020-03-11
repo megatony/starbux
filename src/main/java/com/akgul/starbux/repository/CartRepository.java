@@ -8,7 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
-    Cart getByIdAndDeleted(Long id, boolean deleted);
     Cart getByUserAndDeleted(User user, boolean deleted);
-    Cart getByCartItemsContainsAndDeleted(CartItem cartItem, boolean deleted);
 }

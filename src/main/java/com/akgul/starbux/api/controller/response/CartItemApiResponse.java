@@ -36,7 +36,7 @@ public class CartItemApiResponse extends StarbuxApiResponse {
         this.drinkProduct = new ProductApiResponse(cartItem.getDrinkProduct());
 
         List<ProductApiResponse> productResponses = new ArrayList<>();
-        for (Product product : cartItem.getProducts()) {
+        for (Product product : cartItem.getSideProducts()) {
             if (ProductType.SIDE.equals(product.getProductType())) {
                 ProductApiResponse productResponse = new ProductApiResponse(product);
                 productResponses.add(productResponse);

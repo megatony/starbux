@@ -35,7 +35,7 @@ public class CartService {
         return cartController.getCartByUser(user);
     }
 
-    public CartItem getCartItemOfProductFromCart(Cart cart, Product product) {
+    public CartItem getCartItemOfDrinkProductFromCart(Cart cart, Product product) {
         CartItem result = null;
 
         for (CartItem cartItem : cart.getCartItems()) {

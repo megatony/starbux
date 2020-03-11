@@ -18,7 +18,7 @@ public class Cart extends StarbuxObject {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Where(clause = "DELETED=0")
     private List<CartItem> cartItems = new ArrayList<>();
 

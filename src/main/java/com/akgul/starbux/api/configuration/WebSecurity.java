@@ -17,6 +17,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+
                 .cors().and()
                 .csrf().disable().authorizeRequests()
                 .antMatchers("/report*").hasRole("ADMIN")
@@ -25,11 +26,15 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers("/product*").hasAnyRole("CUSTOMER", "ADMIN")
                 .and()
                 .httpBasic().and()
-                .headers().frameOptions().disable()
-                .and().authorizeRequests()
-                .antMatchers("/swagger-resources/*", "*.html", "/api/v1/swagger.json")
-                .permitAll()
-        ;
+                .headers().frameOptions().disable().and()
+                .authorizeRequests()
+                .antMatchers("/v2/api-docs", "/swagger-resources/configuration/ui", "/swagger-resources", "/swagger-resources/configuration/security", "/swagger-ui.html", "/webjars/**").permitAll()
+                .and()
+                .authorizeRequests()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .csrf().disable();
     }
 
     @Bean

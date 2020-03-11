@@ -5,7 +5,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 
 public class CartItemTest {
 
@@ -17,7 +16,6 @@ public class CartItemTest {
 
         CartItem cartItem = new CartItem();
         cartItem.setQuantity(3);
-        cartItem.setProducts(new ArrayList<>());
         cartItem.setDrinkProduct(product);
         cartItem.calculatePrice();
         Assert.assertEquals(cartItem.getPrice().toString(), "30");

@@ -23,6 +23,10 @@ public class ProductService {
         return productController.getProducts();
     }
 
+    public List<Product> getDrinkProducts() {
+        return productController.getProductsByProductType(ProductType.DRINK);
+    }
+
     public Product getCheapestProductFromProductList(List<Product> products) {
         return products.stream().sorted(new Comparator<Product>() {
             @Override

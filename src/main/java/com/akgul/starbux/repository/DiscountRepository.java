@@ -8,6 +8,4 @@ import java.util.List;
 
 @Repository
 public interface DiscountRepository extends JpaRepository<Discount, Long> {
-    Discount getByIdAndDeleted(Long id, boolean deleted);
-    List<Discount> findAllByDeleted(boolean deleted);
 }

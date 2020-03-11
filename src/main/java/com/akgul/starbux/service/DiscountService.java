@@ -6,6 +6,8 @@ import com.akgul.starbux.entity.CartItem;
 import com.akgul.starbux.entity.Discount;
 import com.akgul.starbux.entity.Product;
 import com.akgul.starbux.enums.DiscountType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import java.util.List;
 
 @Service
 public class DiscountService {
+    private Logger LOGGER = LoggerFactory.getLogger(DiscountService.class);
+
     private static final BigDecimal RATE_DISCOUNT_VALUE = BigDecimal.valueOf(0.25D);
     private static final BigDecimal RATE_DISCOUNT_CART_LIMIT = BigDecimal.valueOf(12);
     private static final int LOWEST_AMOUNT_DISCOUNT_LIMIT = 3;
@@ -29,11 +33,12 @@ public class DiscountService {
         return discountController.saveDiscount(discount);
     }
 
-    public Discount selectDiscountForCart(Cart cart) {
+    protected Discount selectDiscountForCart(Cart cart) {
         BigDecimal rateDiscountAmount = getRateDiscountAmountForCart(cart);
         BigDecimal amountDiscountAmount = getDiscountByLowestAmountForCart(cart);
 
         if (rateDiscountAmount.compareTo(BigDecimal.ZERO) == 0 && amountDiscountAmount.compareTo(BigDecimal.ZERO) == 0) {
+            LOGGER.debug("Discount is not available.");
             return null;
         }
 
@@ -50,21 +55,21 @@ public class DiscountService {
         return amountDiscount;
     }
 
-    public BigDecimal getRateDiscountAmountForCart(Cart cart) {
-        if (cart.getTotalAmount().compareTo(RATE_DISCOUNT_CART_LIMIT) == -1) {
+    protected BigDecimal getRateDiscountAmountForCart(Cart cart) {
+        if (cart.getTotalAmount().compareTo(RATE_DISCOUNT_CART_LIMIT) < 0) {
             return BigDecimal.ZERO;
         }
 
         return cart.getTotalAmount().multiply(RATE_DISCOUNT_VALUE);
     }
 
-    public BigDecimal getDiscountByLowestAmountForCart(Cart cart) {
+    protected BigDecimal getDiscountByLowestAmountForCart(Cart cart) {
         if (cart.calculateTotalDrinkProductNumber() < LOWEST_AMOUNT_DISCOUNT_LIMIT) {
             return BigDecimal.ZERO;
         }
         List<Product> products = new ArrayList<>();
         for (CartItem cartItem : cart.getCartItems()) {
-            products.addAll(cartItem.getProducts());
+            products.add(cartItem.getDrinkProduct());
         }
         return productService.getCheapestProductFromProductList(products).getPrice();
     }

@@ -10,6 +10,8 @@ import com.akgul.starbux.service.CartItemService;
 import com.akgul.starbux.service.CartService;
 import com.akgul.starbux.service.ProductService;
 import com.akgul.starbux.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -22,6 +24,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/cart")
 public class CartApiController {
+
+    private Logger LOGGER = LoggerFactory.getLogger(CartApiController.class);
 
     @Autowired
     private CartService cartService;
@@ -42,6 +46,7 @@ public class CartApiController {
         Cart cart = cartService.getCartByUser(user);
 
         if (ObjectUtils.isEmpty(cart)) {
+            LOGGER.debug("Cart is null for user " + authentication.getName() + ", new cart created by default.");
             cart = new Cart();
             cart.setUser(user);
             return new CartApiResponse(cartService.saveCart(cart));
@@ -93,10 +98,11 @@ public class CartApiController {
             return new CartApiResponse(cartService.createCart(user, product, purchaseCount));
         }
 
-        CartItem cartItem = cartService.getCartItemOfProductFromCart(cart, product);
+        CartItem cartItem = cartService.getCartItemOfDrinkProductFromCart(cart, product);
 
         if (ObjectUtils.isEmpty(cartItem) || cartItem.getSideProducts().size() != 0) {
             cart.addCartItem(cartItemService.createCartItem(cart, product, purchaseCount));
+            LOGGER.debug("A new cart item created for user " + authentication.getName());
             cartService.saveCart(cart);
             return new CartApiResponse(cart);
         }
@@ -133,13 +139,13 @@ public class CartApiController {
             return new StarbuxNotFoundApiResponse("Cart item id " + cartItemId + " not found.");
         }
 
-        List<Product> cartItemProducts = cartItem.getProducts();
+        List<Product> cartItemProducts = cartItem.getSideProducts();
 
         if (cartItemProducts.contains(product)) {
             return new StarbuxConflictApiResponse(product.getProductName() + " is previously added to " + cartItem.getDrinkProduct().getProductName() + " drink.");
         }
 
-        cartItem.addProduct(product);
+        cartItem.getSideProducts().add(product);
         cartItemService.saveCartItem(cartItem);
         return new CartApiResponse(cartService.saveCart(cart));
     }
@@ -202,7 +208,9 @@ public class CartApiController {
         cartService.saveCart(cart);
 
         CartApiResponse apiResponse = new CartApiResponse(cartItem.getCart());
-        apiResponse.setMessage("Cart item " + cartItemId + " is deleted.");
+        String deleteMessage = "Cart item " + cartItemId + " is deleted.";
+        LOGGER.debug(deleteMessage);
+        apiResponse.setMessage(deleteMessage);
         return apiResponse;
     }
 
@@ -224,7 +232,11 @@ public class CartApiController {
         cart.setDeleted(true);
         cartItemService.deleteCartItems(cart.getCartItems());
         CartApiResponse apiResponse = new CartApiResponse(cartService.saveCart(cart));
-        apiResponse.setMessage("Cart is deleted.");
+
+        String cartDeleteMessage = "Cart " + cart.getId() + " is deleted.";
+        LOGGER.debug(cartDeleteMessage);
+        apiResponse.setMessage(cartDeleteMessage);
+
         return apiResponse;
     }
 
@@ -246,18 +258,23 @@ public class CartApiController {
 
         Cart cart = cartService.getCartByUser(user);
 
-        List<Product> cartItemProducts = cartItem.getProducts();
+        if (product.getProductType().equals(ProductType.DRINK) && cartItem.getDrinkProduct().equals(product)) {
+            LOGGER.debug("Drink product required for a cart, cart will be deleted.");
+            cartItem.setDeleted(true);
+            cart.getCartItems().remove(cartItem);
+            cartItemService.saveCartItem(cartItem);
+            cartService.saveCart(cart);
+
+            return new CartApiResponse(cart);
+        }
+
+        List<Product> cartItemProducts = cartItem.getSideProducts();
 
         if (!cartItemProducts.contains(product)) {
             return new StarbuxNotFoundApiResponse(product.getProductName() + " is not found at this cart item.");
         }
 
-        cartItem.removeProduct(product);
-
-        if (product.getProductType().equals(ProductType.DRINK)) {
-            cartItem.setDeleted(true);
-            cart.getCartItems().remove(cartItem);
-        }
+        cartItem.getSideProducts().remove(product);
 
         cartItemService.saveCartItem(cartItem);
         cartService.saveCart(cart);
