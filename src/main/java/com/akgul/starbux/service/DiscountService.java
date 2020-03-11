@@ -70,6 +70,7 @@ public class DiscountService {
         List<Product> products = new ArrayList<>();
         for (CartItem cartItem : cart.getCartItems()) {
             products.add(cartItem.getDrinkProduct());
+            products.addAll(cartItem.getSideProducts());
         }
         return productService.getCheapestProductFromProductList(products).getPrice();
     }
